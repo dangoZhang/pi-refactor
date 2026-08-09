@@ -1,0 +1,58 @@
+{
+  "name": "agent-refactor",
+  "version": "0.1.0",
+  "description": "Restart a drifting coding-agent task from its original commit with trace-grounded experience",
+  "type": "module",
+  "license": "MIT",
+  "author": "dangoZhang",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dangoZhang/agent-refactor.git"
+  },
+  "homepage": "https://github.com/dangoZhang/agent-refactor#readme",
+  "bugs": {
+    "url": "https://github.com/dangoZhang/agent-refactor/issues"
+  },
+  "files": [
+    "README.zh-CN.md",
+    "extensions",
+    "prompts",
+    "skills",
+    "install.mjs"
+  ],
+  "bin": {
+    "agent-refactor": "./install.mjs"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/refactor.ts"
+    ]
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts",
+    "prepublishOnly": "npm run check && npm test"
+  },
+  "keywords": [
+    "pi-package",
+    "codex-skill",
+    "opencode-command",
+    "coding-agent",
+    "context-compaction",
+    "agent-trajectory"
+  ],
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-ai": "0.84.1",
+    "@earendil-works/pi-coding-agent": "0.84.1",
+    "@types/node": "22.19.19",
+    "tsx": "4.22.1",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  }
+}
