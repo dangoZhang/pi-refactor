@@ -1,5 +1,5 @@
 {
-  "name": "agent-refactor",
+  "name": "pi-refactor",
   "version": "0.1.0",
   "description": "Restart a drifting coding-agent task from its original commit with trace-grounded experience",
   "type": "module",
@@ -7,11 +7,11 @@
   "author": "dangoZhang",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dangoZhang/agent-refactor.git"
+    "url": "git+https://github.com/dangoZhang/pi-refactor.git"
   },
-  "homepage": "https://github.com/dangoZhang/agent-refactor#readme",
+  "homepage": "https://github.com/dangoZhang/pi-refactor#readme",
   "bugs": {
-    "url": "https://github.com/dangoZhang/agent-refactor/issues"
+    "url": "https://github.com/dangoZhang/pi-refactor/issues"
   },
   "files": [
     "README.zh-CN.md",
@@ -21,7 +21,7 @@
     "install.mjs"
   ],
   "bin": {
-    "agent-refactor": "./install.mjs"
+    "pi-refactor": "./install.mjs"
   },
   "pi": {
     "extensions": [

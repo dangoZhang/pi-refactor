@@ -1,10 +1,10 @@
-<h1 align="center">Agent Refactor</h1>
+<h1 align="center">Pi Refactor</h1>
 
 <p align="center"><strong>让跑偏的 coding agent 回到起点，同时保留工具已经证明的经验。</strong></p>
 
 <p align="center"><a href="README.md">English</a> · <a href="LICENSE">MIT</a></p>
 
-长会话会积累过时假设、失败 patch 和 assistant 自己写出的解释。Agent Refactor 提供一次重试指令：合并历次用户要求，只从工具调用/结果提取证据，备份旧工作，回到任务开始时的 commit，再用全新上下文完成任务。
+长会话会积累过时假设、失败 patch 和 assistant 自己写出的解释。Pi Refactor 提供一次重试指令：合并历次用户要求，只从工具调用/结果提取证据，备份旧工作，回到任务开始时的 commit，再用全新上下文完成任务。
 
 ```text
 多轮 trace → user + tool calls/results → Refactor packet
@@ -20,7 +20,7 @@ Pi 版本只有一个扩展且无运行时依赖；Codex 和 OpenCode 复用同�
 需要 Git、Pi 0.84.1+ 和 Node.js 22.19+：
 
 ```bash
-pi install npm:agent-refactor
+pi install npm:pi-refactor
 ```
 
 重启 Pi 或执行 `/reload`，然后：
@@ -35,7 +35,7 @@ Pi 会在 session 启动时记录 `HEAD`。执行 `/refactor` 后，它会额外
 ### Codex
 
 ```bash
-npx agent-refactor install codex
+npx pi-refactor install codex
 ```
 
 重启 Codex 后使用：
@@ -49,7 +49,7 @@ $refactor BASE=abc123 保持公开 API 不变
 ### OpenCode
 
 ```bash
-npx agent-refactor install opencode
+npx pi-refactor install opencode
 ```
 
 之后使用 `/refactor`。命令安装到 `~/.config/opencode/commands/refactor.md`，共享 skill 安装到 `~/.agents/skills/refactor/SKILL.md`。
@@ -57,7 +57,7 @@ npx agent-refactor install opencode
 本地源码安装：
 
 ```bash
-pi install /absolute/path/to/agent-refactor
+pi install /absolute/path/to/pi-refactor
 node install.mjs install codex opencode
 ```
 
@@ -86,14 +86,14 @@ Refactor packet 只接收：
 reset 前会依次：
 
 1. 拒绝在 merge、rebase、cherry-pick、revert 进行中执行；
-2. 把当前 commit 保存到 `refs/agent-refactor/backups/<timestamp>`；
-3. 用 `agent-refactor backup` 备注 stash tracked/untracked 改动；
+2. 把当前 commit 保存到 `refs/pi-refactor/backups/<timestamp>`；
+3. 用 `pi-refactor backup` 备注 stash tracked/untracked 改动；
 4. 执行 `git reset --hard <base>` 和 `git clean -fd`。
 
 不会使用 `git clean -x`，ignored 文件保持不动。恢复旧尝试：
 
 ```bash
-git show refs/agent-refactor/backups/<timestamp>
+git show refs/pi-refactor/backups/<timestamp>
 git stash apply <stash-hash>
 ```
 
@@ -131,4 +131,4 @@ npm test
 
 ## License
 
-[MIT](LICENSE) © Agent Refactor contributors
+[MIT](LICENSE) © Pi Refactor contributors

@@ -13,7 +13,7 @@ const selected = targets.length ? targets : ["codex", "opencode"];
 const valid = new Set(["codex", "opencode"]);
 
 if (selected.some((target) => !valid.has(target))) {
-	console.error("Usage: agent-refactor install [codex] [opencode] [--force]");
+	console.error("Usage: pi-refactor install [codex] [opencode] [--force]");
 	process.exitCode = 2;
 } else {
 	const prompt = await readFile(join(root, "prompts", "refactor.md"), "utf8");

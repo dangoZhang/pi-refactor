@@ -67,9 +67,9 @@ test("buildEvidence keeps users and tools while dropping assistant prose and thi
 });
 
 test("checkpoint preserves committed and dirty work before resetting to base", async () => {
-	const root = await mkdtemp(join(tmpdir(), "agent-refactor-test-"));
+	const root = await mkdtemp(join(tmpdir(), "pi-refactor-test-"));
 	await git(root, ["init"]);
-	await git(root, ["config", "user.name", "Agent Refactor Test"]);
+	await git(root, ["config", "user.name", "Pi Refactor Test"]);
 	await git(root, ["config", "user.email", "test@example.com"]);
 	await writeFile(join(root, "tracked.txt"), "base\n");
 	await git(root, ["add", "tracked.txt"]);

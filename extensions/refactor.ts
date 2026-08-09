@@ -5,7 +5,7 @@ import { type Message, uuidv7 } from "@earendil-works/pi-ai";
 import type { ExtensionAPI, SessionEntry } from "@earendil-works/pi-coding-agent";
 
 const execFileAsync = promisify(execFile);
-const BASE_ENTRY = "agent-refactor-base";
+const BASE_ENTRY = "pi-refactor-base";
 const RESULT_LIMIT = 4_000;
 const MESSAGE_LIMIT = 12_000;
 
@@ -122,13 +122,13 @@ export async function checkpoint(root: string, requestedBase: string): Promise<B
 	const base = await git(root, ["rev-parse", "--verify", `${requestedBase}^{commit}`]);
 	const previousHead = await git(root, ["rev-parse", "HEAD"]);
 	const stamp = new Date().toISOString().replace(/[-:.TZ]/g, "");
-	const backupRef = `refs/agent-refactor/backups/${stamp}`;
+	const backupRef = `refs/pi-refactor/backups/${stamp}`;
 	await git(root, ["update-ref", backupRef, previousHead]);
 
 	let stash: string | undefined;
 	if (await git(root, ["status", "--porcelain=v1"])) {
 		const previousStash = await git(root, ["rev-parse", "-q", "--verify", "refs/stash"]).catch(() => "");
-		await git(root, ["stash", "push", "--include-untracked", "-m", `agent-refactor backup ${stamp}`]);
+		await git(root, ["stash", "push", "--include-untracked", "-m", `pi-refactor backup ${stamp}`]);
 		const nextStash = await git(root, ["rev-parse", "-q", "--verify", "refs/stash"]).catch(() => "");
 		if (nextStash && nextStash !== previousStash) stash = nextStash;
 	}
