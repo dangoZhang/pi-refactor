@@ -97,28 +97,6 @@ git show refs/pi-refactor/backups/<timestamp>
 git stash apply <stash-hash>
 ```
 
-## 验证结果
-
-本机还用 Pi 0.84.1 和 Codex CLI 0.144.1 + `gpt-5.6-luna` 做了真实端到端：第一轮故意写入 `WRONG`，随后执行 Refactor。两端均成功创建 backup ref + stash、reset 到 base、启动全新 session/worker，并验证最终文件精确为 `RIGHT\n`。这证明 orchestration 和上下文隔离可用，尚不能证明普遍的 pass@1 提升。
-
-## 与已有工作的关系
-
-- [LLMs Get Lost in Multi-Turn Conversation](https://arxiv.org/abs/2505.06120) 研究了多轮可靠性下降和简单 Recap；其 [实现](https://github.com/microsoft/lost_in_conversation/blob/main/simulator_recap.py) 会把完整任务追加到旧上下文。Refactor 还会删除 assistant 历史、恢复仓库并用新上下文重试。
-- [SWE-Together](https://github.com/Togetherbench/SWE-Together) 与 [SWE-Interact](https://github.com/scaleapi/SWE-Interact) 说明 coding agent 需要持续吸收用户纠正，因此 Refactor 合并全部用户要求。
-- Pi 的 [handoff 示例](https://github.com/earendil-works/pi-mono/blob/main/packages/coding-agent/examples/extensions/handoff.ts) 能为新 session 生成 prompt，但会序列化 assistant 内容，也不恢复 Git。
-- Claude Code 的 [`/rewind`](https://code.claude.com/docs/en/checkpointing) 能回退对话或代码 checkpoint，但没有跨 agent 的 user 合并和工具证据 packet。
-- [SE-Agent](https://github.com/JARVIS-Xs/SE-Agent) 会修订、重组失败轨迹；它是 benchmark 级搜索框架，Refactor 是单次交互式重试原语。
-
-目前没有找到同时覆盖“可恢复 Git reset、user prompt 合并、仅工具证据压缩、Codex/Pi/OpenCode 打包”的开源项目。
-
-## 限制
-
-- Pi 能精确记录 session 起点。Codex/OpenCode 无法从 trace 确定时，或任务中创建过 commit 时，应显式传 `BASE=<commit>`。
-- 压缩模型仍可能漏掉或误写证据；`[Tn]` 让结果可审计，但不保证正确。
-- stash 不包含 ignored 文件，Refactor 也不会删除 ignored 文件。
-- 测试机未安装 OpenCode，因此只按其官方 command/skill 机制完成支持，尚未本机执行。
-- 这是创建恢复点后执行的破坏性操作；重要工作树应核对输出的 base 和恢复标识。
-
 ## 开发
 
 ```bash

@@ -104,37 +104,6 @@ git show refs/pi-refactor/backups/<timestamp>
 git stash apply <stash-hash>
 ```
 
-## Evaluation
-
-### Installed end-to-end checks
-
-We installed the package locally and ran the same controlled dirty-worktree scenario through Pi 0.84.1 and Codex CLI 0.144.1 with `gpt-5.6-luna`: the first turn wrote `WRONG`, then Refactor had to back it up, reset, create a fresh session/worker, apply the corrected user requirement, and verify exact bytes.
-
-| Host | Reset | Recovery ref + stash | Fresh context | Final `RIGHT\n` |
-|---|---:|---:|---:|---:|
-| Pi | pass | pass | new session | pass |
-| Codex | pass | pass | isolated worker | pass |
-
-These checks validate orchestration and isolation, not a general pass@1 improvement. A paired coding benchmark is still needed before claiming task-quality gains.
-
-## Related work
-
-- [LLMs Get Lost in Multi-Turn Conversation](https://arxiv.org/abs/2505.06120) reports a large reliability loss in underspecified multi-turn tasks and evaluates a simple Recap turn. Its [reference implementation](https://github.com/microsoft/lost_in_conversation/blob/main/simulator_recap.py) appends the complete task to the existing conversation; Pi Refactor additionally removes assistant-authored history, resets repository state, and retries in a fresh context.
-- [SWE-Together](https://github.com/Togetherbench/SWE-Together) and [SWE-Interact](https://github.com/scaleapi/SWE-Interact) evaluate progressively revealed coding tasks and corrective user turns. They motivate preserving all user corrections instead of summarizing only the latest request.
-- Pi's [handoff example](https://github.com/earendil-works/pi-mono/blob/main/packages/coding-agent/examples/extensions/handoff.ts) generates a prompt for a new session. It serializes assistant content and does not restore Git; Pi Refactor narrows the trace to user/tool evidence and couples handoff with a recoverable reset.
-- Claude Code's [`/rewind`](https://code.claude.com/docs/en/checkpointing) restores conversation or code checkpoints. It is host-specific and does not merge trace-grounded lessons into a cross-agent retry packet.
-- [SE-Agent](https://github.com/JARVIS-Xs/SE-Agent) revises and recombines failed SWE-bench trajectories. It is a benchmark-scale search framework; Pi Refactor is a single interactive retry primitive and deliberately excludes unsupported self-reflection.
-
-No reviewed project combined all four properties: recoverable Git reset, user-prompt merging, tool-evidence-only compression, and Codex/Pi/OpenCode packaging.
-
-## Limits
-
-- Pi can capture the starting commit exactly at session start. On Codex or OpenCode, pass `BASE=<commit>` when the trace does not establish it or when the agent created commits during the task.
-- The compaction model can still omit or misstate evidence. `[Tn]` citations make the packet auditable but do not guarantee correctness.
-- Stash excludes ignored files. Refactor also leaves ignored files untouched.
-- OpenCode support follows its documented command/skill surfaces but was not executed locally because OpenCode was not installed on the test machine.
-- Refactor is intentionally destructive after creating recovery points. Review the printed base and recovery identifiers for important worktrees.
-
 ## Development
 
 ```bash
